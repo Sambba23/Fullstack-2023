@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import Filter from './Filter'
 import Form from './Form'
 import Search from './Search'
-import axios from 'axios'
 import noteService from './services/notes'
 
 const App = () => {
@@ -16,8 +15,7 @@ const App = () => {
   const [person, setPerson] = useState([])
 
   const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
+    noteService.getAll()
       .then(response => 
         setPerson(response.data))
   }
@@ -41,14 +39,18 @@ const App = () => {
     event.preventDefault()
     
     if (person.some( p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+      const existingPerson = person.find( p => p.name === newName)
+      if (window.confirm(`${newName} is already added to phonebook, replace the old with a new one?`)){
+        noteService.update(existingPerson.id, newPerson)
+          .then(x => {
+            setPerson(person.map(p => p.id === existingPerson.id ? x.data : p));
+            setNewName('');
+            setNewNumber(''); })
+      }
+      
     } else {
       setPerson(person.concat(newPerson))
-      axios
-        .post('http://localhost:3001/persons', newPerson)
-        .then(response => {
-            console.log(response)
-          })
+      noteService.create(newPerson)
       setNewName('')
       setNewNumber('')
     }
@@ -57,6 +59,21 @@ const App = () => {
   const handleSearch = (event) => {
     setSearch(event.target.value)
   }
+
+  const deletePerson = id => {
+    const personToDelete = person.find(p => p.id === id);
+    if (personToDelete && window.confirm(`Delete ${personToDelete.name} ?`)) {
+      noteService.delett(id)
+        .then(() => {
+          setPerson(person.filter(p => p.id !== id));
+        })
+        .catch(error => {
+          console.error("Error deleting person:", error);
+          alert("There was an error deleting the person. Please try again.");
+        });
+    }
+  }
+  
 
   return (
     <div>
@@ -71,7 +88,7 @@ const App = () => {
         addNote={addNote}
       />
       <h2>Numbers</h2>
-      <Filter persons={person} search={search}/>
+      <Filter persons={person} search={search} helpdelete={deletePerson}/>
       </div>
   )
 
