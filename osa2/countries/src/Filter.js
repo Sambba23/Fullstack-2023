@@ -1,33 +1,23 @@
 import React from 'react'
 import App from './App'
+import Show from './Show'
+import ShowDetails from './ShowDetails'
 
-const Filter = ({c}) => {
+const Filter = ({c, actionBut}) => {
     if (c.length >= 10) {
         return(
             <div>Too many matches, specify another filter</div>
         )
     } else if (c.length === 1) {
         return(
-            <div>
-            <h1>{c[0].name.common}</h1>
-            <p>Capital {c[0].capital}</p>
-            <p>Area {c[0].area}</p>
-            <h2>Languages:</h2>
-            <ul>
-                {Object.values(c[0].languages).map((language, index) => (
-                    <li key={index}>{language}</li>
-                ))}
-            </ul>
-            <img src={c[0].flags.svg} style={{ width: '150px' }}/>
-
-            </div>
+            <ShowDetails c = {c}/>
         )
     }
 
 
     return(
         <div>
-            {c.map( x => <p>{x.name.common}</p> )}
+            {c.map( x => <p>{x.name.common} <button onClick={() => actionBut(x.name.common)}>show</button> </p> )}
         </div>
     )
 }

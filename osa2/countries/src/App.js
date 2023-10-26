@@ -17,10 +17,14 @@ const App = () => {
     country.name.common.toLowerCase().includes(search.toLowerCase())
   );
 
+  const searchEdit = (event) => {
+    setSearch(event)
+  }
+
   return (
     <div>
       <Finder search = {search} handleIt = {handleSearch}/>
-      <Filter c = {filteredCountries}/>
+      <Filter c = {filteredCountries} actionBut={searchEdit}/>
     </div>
   );
 }
