@@ -4,6 +4,8 @@ import Finder from './Finder'
 import useCountries from './ApiHandler'
 import Filter from './Filter'
 
+
+
 const App = () => {
 
   const [search, setSearch] = useState('')

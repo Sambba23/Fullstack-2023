@@ -1,23 +1,28 @@
 import React from 'react'
-import App from './App'
-import Show from './Show'
 import ShowDetails from './ShowDetails'
+import WeatherApi from './WeatherApi'
 
-const Filter = ({c, actionBut}) => {
+const Filter = ({ c, actionBut }) => {
     if (c.length >= 10) {
-        return(
+        return (
             <div>Too many matches, specify another filter</div>
         )
     } else if (c.length === 1) {
-        return(
-            <ShowDetails c = {c}/>
+        return (
+            <div>
+            <ShowDetails c={c} />
+            <WeatherApi/>
+            </div>
         )
     }
 
-
-    return(
+    return (
         <div>
-            {c.map( x => <p>{x.name.common} <button onClick={() => actionBut(x.name.common)}>show</button> </p> )}
+            {c.map(x => (
+                <p key={x.name.common}>
+                    {x.name.common} <button onClick={() => actionBut(x.name.common)}>show</button>
+                </p>
+            ))}
         </div>
     )
 }

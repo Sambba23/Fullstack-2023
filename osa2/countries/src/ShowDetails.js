@@ -1,6 +1,6 @@
 import React from 'react';
 import Show from './Show'
-
+import WeatherApi from './WeatherApi'
 
 const ShowDetails = ({c}) => {
     return(
@@ -15,6 +15,7 @@ const ShowDetails = ({c}) => {
             ))}
         </ul>
         <img src={c[0].flags.svg} style={{ width: '150px' }}/>
+        {c && c[0] && c[0].capital && <WeatherApi city={c[0].capital} />}
 
         </div>
     )
